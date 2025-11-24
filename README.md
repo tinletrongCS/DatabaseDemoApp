@@ -52,8 +52,13 @@
 
 ### Bước 4:
 * Vào mục **SQL Server Network Configuration** phía bên trái.
-* Chọn **Protocols for MSSQLSERVER**
+* Chọn **Protocols for MSSQLSERVER**.
 <img width="1222" height="875" alt="image" src="https://github.com/user-attachments/assets/76e1ec5a-6de6-46ba-8577-e32952ddad0d" />
+
+### Bước 5:
+* Ban đầu nó đang để *Disable*,
+* Chuột phải vào **TCP/IP** chọn *Enable*.
+<img width="1227" height="878" alt="image" src="https://github.com/user-attachments/assets/3b742682-338c-4e1f-bcc5-1b88a954a6ab" />
 
 
 
