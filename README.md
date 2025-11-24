@@ -50,7 +50,8 @@
 <img width="1918" height="757" alt="image" src="https://github.com/user-attachments/assets/b31fc2f4-d266-4df8-99a2-1aea2af18b63" />
  
 ### Kết nối thành công 
- <img width="1918" height="667" alt="image" src="https://github.com/user-attachments/assets/56870823-18bb-4916-a543-3161ae24e4c2" />
+<img width="1918" height="362" alt="image" src="https://github.com/user-attachments/assets/c92383d1-1fd9-471a-8c2e-901f52c0346e" />
+
 
 ### Hiện lỗi như vầy là cấu hình kết nối thông qua TCP/IP tới SQL Server trên máy chưa thành công.
 <img width="1918" height="968" alt="image" src="https://github.com/user-attachments/assets/38d54948-7a8b-4c89-b451-3ff655dd8216" />
