@@ -1,5 +1,5 @@
 # Cấu trúc dự án 
-
+```
 ├── pom.xml
 ├── src
 │   ├── main
@@ -18,6 +18,8 @@
 │   │   └── resources
 │   └──
 ...
+```
 
-# Hướng dẫn kết nối Database trên máy của từng người
+
+# Hướng dẫn kết nối Database
 
