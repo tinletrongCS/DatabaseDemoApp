@@ -89,7 +89,7 @@
 
 ### Bước 7:
 * Sang tab **IP Addresses**.
-* Ban đầu chỗ *TCP Dynamic Port* có số 0 thì xóa nó đi.
+* Ban đầu chỗ **TCP Dynamic Port** có số 0 thì xóa nó đi.
 * Nhập vào ô **TCP Port** giá trị *1433* (Hoặc tùy tụi m muốn config cổng nào cũng được).
 <img width="677" height="715" alt="image" src="https://github.com/user-attachments/assets/a7cbf5a4-4124-4f22-bc8c-36c3a2089a5f" />
 
