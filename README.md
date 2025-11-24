@@ -47,14 +47,16 @@
 # Hướng dẫn kết nối Database
 
 ### Chạy hàm main trong src/main/java/org/example/Main.java để test thử kết nối tới database. 
-<img width="1918" height="757" alt="image" src="https://github.com/user-attachments/assets/b31fc2f4-d266-4df8-99a2-1aea2af18b63" />
- 
+<img width="1502" height="573" alt="image" src="https://github.com/user-attachments/assets/181d4944-638b-4bd7-9fb7-9314fe4cb61b" />
+
+
 ### Kết nối thành công 
 <img width="1918" height="362" alt="image" src="https://github.com/user-attachments/assets/c92383d1-1fd9-471a-8c2e-901f52c0346e" />
 
 
 ### Hiện lỗi như vầy là cấu hình kết nối thông qua TCP/IP tới SQL Server trên máy chưa thành công.
-<img width="1918" height="968" alt="image" src="https://github.com/user-attachments/assets/38d54948-7a8b-4c89-b451-3ff655dd8216" />
+<img width="1918" height="700" alt="image" src="https://github.com/user-attachments/assets/5f3bf89b-a971-48d3-8f6f-d2fd971d90dd" />
+
 
 ### Gõ chọn compmgmt.msc để mở cấu hình các service 
 <img width="448" height="260" alt="image" src="https://github.com/user-attachments/assets/f8f5080b-fcd8-474a-abc5-1f3208ab99ba" />
