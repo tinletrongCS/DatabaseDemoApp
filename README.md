@@ -60,6 +60,26 @@
 * Chuột phải vào **TCP/IP** chọn *Enable*.
 <img width="1227" height="878" alt="image" src="https://github.com/user-attachments/assets/3b742682-338c-4e1f-bcc5-1b88a954a6ab" />
 
+### Bước 6:
+* Xong vào **Properties** để cấu hình Port.
+<img width="527" height="181" alt="image" src="https://github.com/user-attachments/assets/f7796ae6-4ddf-45af-b9a9-a102d7e2bd94" />
+
+### Bước 7:
+* Sang tab **IP Addresses**.
+* Ban đầu chỗ **TCP Dynamic Port* có số 0 thì xóa nó đi.
+* Nhập vào ô **TCP Port** giá trị *1433* (Hoặc tùy tụi m muốn config cổng nào cũng được).
+<img width="677" height="715" alt="image" src="https://github.com/user-attachments/assets/a7cbf5a4-4124-4f22-bc8c-36c3a2089a5f" />
+
+
+### Bước 8:
+
+* Ra **SQL Server Serives** để *Restart* lại.
+* Xong rồi chạy lại hàm **main** phía trên kia.
+<img width="1013" height="855" alt="image" src="https://github.com/user-attachments/assets/0b1680e5-6f9f-46f7-bfd8-e2383dfc97ba" />
+
+
+
+
 
 
 
