@@ -18,16 +18,31 @@
 ```
 
 
+
+## Package dao (Data Access Object)
+* **Nhiệm vụ:**  Là cầu nối giữa Java và SQL Server. Mọi câu lệnh SQL (SELECT, INSERT, UPDATE, DELETE) đều phải nằm ở đây.
+* **Cách hoạt động:**
+  Mở kết nối từ database.
+  Thực hiện truy vấn thông qua *query*.
+  Đóng gói data vào file tương ứng trong package **model** và trả về.
+  
+* **Ví dụ:** *SanPhamDAO.java* chứa hàm **layDanhSachSanPham()** để lấy dữ liệu từ bảng **SAN_PHAM** trả về List các đối tượng **SanPham**.
+
+## Package database (Database Configuration)
+* **Nhiệm vụ:** Quản lý việc kết nối đến SQL Server.
+* **Class chính:** DatabaseConnection.java.
+* **Lưu ý:** Chứa thông tin URL, Username, Password. Vào đây sửa mật khẩu sa cho đúng với máy cá nhân của mình.
+
 ## Package model (Data model)
 * **Nhiệm vụ:**  Chứa các class mô tả dữ liệu, ánh xạ trực tiếp 1-1 với các bảng trong SQL Server.
 * **Ví dụ:*** Class *SanPham.java* tương ứng với bảng **SAN_PHAM.**
 * **Lưu ý:**  Chỉ chứa thuộc tính *(properties), Constructor, Getter/Setter*. Không viết code xử lý logic hay giao diện ở đây.
 
-## Package database (Database Configuration)
-
-## Package dao (Data Access Object)
 
 ## Package view (UI)
+* **Nhiệm vụ:** Chứa mã nguồn giao diện người dùng (Java Swing).
+* **Nhiệm vụ team 1:** Code các *JFrame, JPanel, JTable* tại đây.
+* **Quy tắc:** Giao diện **KHÔNG** được gọi trực tiếp SQL. Muốn lấy dữ liệu, View phải gọi thông qua **DAO**.
 
 # Hướng dẫn kết nối Database
 
@@ -83,7 +98,7 @@
 <img width="1013" height="855" alt="image" src="https://github.com/user-attachments/assets/0b1680e5-6f9f-46f7-bfd8-e2383dfc97ba" />
 
 ## Chạy thử tính năng
-* Muốn chạy 1 tính năng liên quan đến bảng nào đó, ví dụ bảng **SAN_PHAM** trong file *.sql*, thì vào trong **src/main/java/org/example/view/SanPhamView.java** rồi chạy hàm main trong đó, mọi thay đổi trong file *.sql* sẽ được cập nhật trong **model/SanPham.java**, rồi lúc demo sẽ hiện rõ thay đổi trên UI.
+* Muốn chạy 1 tính năng liên quan đến bảng nào đó, ví dụ bảng **SAN_PHAM** trong file *.sql*, thì vào trong **src/main/java/org/example/view/SanPhamView.java** rồi chạy hàm *main* trong đó, mọi thay đổi trong file *.sql* sẽ được cập nhật trong **model/SanPham.java**, rồi lúc demo sẽ hiện rõ thay đổi trên UI.
 * Ở đây tớ có thêm 1 hàng vào trong bảng **SAN_PHAM**.
 * Chạy trong **view** thì nó cập nhật ra nhé.
 <img width="1272" height="277" alt="image" src="https://github.com/user-attachments/assets/3fdfd493-8d9d-4fb5-b918-39f92d88e6b9" />
