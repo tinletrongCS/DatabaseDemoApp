@@ -33,7 +33,7 @@
 * **Class chính:** DatabaseConnection.java.
 * **Lưu ý:** Chứa thông tin URL, Username, Password. Vào đây sửa mật khẩu sa cho đúng với máy cá nhân của mình.
 
-  ```
+```
   public class DatabaseConnection {
     public static Connection getConnection() {
         String dbURL = "jdbc:sqlserver://localhost:1433;databaseName=HeThongBanHang;encrypt=true;trustServerCertificate=true;";
@@ -52,7 +52,7 @@
         return null;
     }
 }
-  ```
+```
 
 ## Package model (Data model)
 * **Nhiệm vụ:**  Chứa các class mô tả dữ liệu, ánh xạ trực tiếp 1-1 với các bảng trong SQL Server.
