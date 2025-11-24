@@ -19,7 +19,7 @@
 
 
 
-## Package dao (Data Access Object)
+## Package *dao* (Data Access Object)
 * **Nhiệm vụ:**  Là cầu nối giữa Java và SQL Server. Mọi câu lệnh SQL (SELECT, INSERT, UPDATE, DELETE) đều phải nằm ở đây.
 * **Cách hoạt động:**
   Mở kết nối từ database.
@@ -28,7 +28,7 @@
   
 * **Ví dụ:** *SanPhamDAO.java* chứa hàm **layDanhSachSanPham()** để lấy dữ liệu từ bảng **SAN_PHAM** trả về List các đối tượng **SanPham**.
 
-## Package database (Database Configuration)
+## Package *database* (Database Configuration)
 * **Nhiệm vụ:** Quản lý việc kết nối đến SQL Server.
 * **Class chính:** DatabaseConnection.java.
 * **Lưu ý:** Chứa thông tin URL, Username, Password. Vào đây sửa mật khẩu sa cho đúng với máy cá nhân của mình.
@@ -54,13 +54,13 @@
 }
 ```
 
-## Package model (Data model)
+## Package *model* (Data model)
 * **Nhiệm vụ:**  Chứa các class mô tả dữ liệu, ánh xạ trực tiếp 1-1 với các bảng trong SQL Server.
 * **Ví dụ:*** Class *SanPham.java* tương ứng với bảng **SAN_PHAM.**
 * **Lưu ý:**  Chỉ chứa thuộc tính *(properties), Constructor, Getter/Setter*. Không viết code xử lý logic hay giao diện ở đây.
 
 
-## Package view (UI)
+## Package *view* (UI)
 * **Nhiệm vụ:** Chứa mã nguồn giao diện người dùng (Java Swing).
 * **Nhiệm vụ team 1:** Code các *JFrame, JPanel, JTable* tại đây.
 * **Quy tắc:** Giao diện **KHÔNG** được gọi trực tiếp SQL. Muốn lấy dữ liệu, View phải gọi thông qua **DAO**.
