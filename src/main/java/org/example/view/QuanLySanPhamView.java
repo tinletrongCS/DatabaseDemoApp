@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.text.Collator;
 import java.util.Locale;
-// import java.util.Comparator;
+
 
 public class QuanLySanPhamView extends JFrame {
     private JTable table; // Bảng hiển thị sản phẩm
@@ -158,12 +158,14 @@ public class QuanLySanPhamView extends JFrame {
         mainTopPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         mainTopPanel.add(detailPanel);
 
+        java.awt.Insets bigMargin = new java.awt.Insets(9, 18, 9, 18);//3 6 3 6
         JPanel reloadPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         reloadPanel.setOpaque(false);
         JButton btnReload = new JButton("Làm Mới");
         btnReload.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
         btnReload.setBackground(new Color(40, 167, 69));
         btnReload.setForeground(Color.WHITE);
+        btnReload.setMargin(bigMargin);
 
         // NÚT SỬA SẢN PHẨM
         JButton btnSua = new JButton("✏️ Sửa");
@@ -185,11 +187,13 @@ public class QuanLySanPhamView extends JFrame {
         btnAudit.addActionListener(e -> {
             new AuditSanPhamView().setVisible(true);
         });
+        btnAudit.setMargin(bigMargin);
 
-        btnLinkToFriend = new JButton("◀ Quay lại Menu");
+        btnLinkToFriend = new JButton("Quay lại Menu");
         btnLinkToFriend.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-        btnLinkToFriend.setBackground(new Color(108, 117, 125));
+        btnLinkToFriend.setBackground(new Color(220, 53, 69));
         btnLinkToFriend.setForeground(Color.WHITE);
+        btnLinkToFriend.setMargin(bigMargin);
 
         reloadPanel.add(btnSua);
         reloadPanel.add(Box.createHorizontalStrut(10));

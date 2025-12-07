@@ -29,18 +29,18 @@ public class Main2 {
         menuFrame.setLayout(new GridLayout(3, 1, 10, 10));
 
         JLabel lblTitle = new JLabel("CHỌN GIAO DIỆN", JLabel.CENTER);
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 24));
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
         lblTitle.setForeground(new Color(0, 51, 102));
 
-        JButton btnTimKiem = new JButton("🔍 Giao Diện Tìm Kiếm Sản Phẩm");
-        btnTimKiem.setFont(new Font("Arial", Font.BOLD, 16));
+        JButton btnTimKiem = new JButton("Giao Diện Tìm Kiếm Sản Phẩm");
+        btnTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 16));
         btnTimKiem.setBackground(new Color(52, 152, 219));
         btnTimKiem.setForeground(Color.WHITE);
         btnTimKiem.setFocusPainted(false);
         btnTimKiem.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        JButton btnCRUD = new JButton("✏️ Giao Diện Thêm/Sửa/Xóa (CRUD)");
-        btnCRUD.setFont(new Font("Arial", Font.BOLD, 16));
+        JButton btnCRUD = new JButton("Giao Diện Thêm/Sửa/Xóa (CRUD)");
+        btnCRUD.setFont(new Font("Segoe UI", Font.BOLD, 16));
         btnCRUD.setBackground(new Color(46, 204, 113));
         btnCRUD.setForeground(Color.WHITE);
         btnCRUD.setFocusPainted(false);

@@ -1925,4 +1925,3 @@ SELECT MaSanPham, TenSanPham, SoSaoSanPham
 FROM SAN_PHAM
 WHERE MaSanPham = 'PROD0001';
 -- Kết quả dự kiến: Còn lại 1 đánh giá 1 sao. Trung bình là 1.0
-
