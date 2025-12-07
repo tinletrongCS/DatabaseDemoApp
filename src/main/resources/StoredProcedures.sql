@@ -59,7 +59,7 @@ GO
 
 
 
--- 2. Stored Procedure: Thêm sản phẩm (Trigger xử lý validation)
+-- 2. Stored Procedure: Thêm sản phẩm (Có validation trong thủ tục)
 CREATE OR ALTER PROCEDURE sp_ThemSanPham
     @MaSanPham VARCHAR(100),
     @MaSoShop CHAR(8),
@@ -70,8 +70,51 @@ CREATE OR ALTER PROCEDURE sp_ThemSanPham
     @Loai NVARCHAR(100)
 AS
 BEGIN
+    SET NOCOUNT ON;
+
+    -- ========== VALIDATION (YÊU CẦU 2.1) ==========
+
+    -- Validate 1: Kiểm tra giá sản phẩm phải > 0
+    IF @GiaHienThi <= 0
+    BEGIN
+        RAISERROR(N'Lỗi: Giá sản phẩm phải lớn hơn 0', 16, 1);
+        RETURN;
+    END
+
+    -- Validate 2: Kiểm tra Shop có tồn tại không
+    IF NOT EXISTS (SELECT 1
+    FROM CUA_HANG
+    WHERE MaSoShop = @MaSoShop)
+    BEGIN
+        RAISERROR(N'Lỗi: Mã shop không tồn tại!', 16, 1);
+        RETURN;
+    END
+
+    -- Validate 3: Kiểm tra tên sản phẩm không rỗng
+    IF LEN(LTRIM(RTRIM(@TenSanPham))) = 0
+    BEGIN
+        RAISERROR(N'Lỗi: Tên sản phẩm không được để trống!', 16, 1);
+        RETURN;
+    END
+
+    -- Validate 4: Kiểm tra loại sản phẩm không rỗng
+    IF LEN(LTRIM(RTRIM(@Loai))) = 0
+    BEGIN
+        RAISERROR(N'Lỗi: Loại sản phẩm không được để trống!', 16, 1);
+        RETURN;
+    END
+
+    -- Validate 5: Kiểm tra link sản phẩm không trùng
+    IF @LinkSanPham IS NOT NULL AND EXISTS (SELECT 1
+        FROM SAN_PHAM
+        WHERE LinkSanPham = @LinkSanPham)
+    BEGIN
+        RAISERROR(N'Lỗi: Link sản phẩm đã được sử dụng bởi sản phẩm khác!', 16, 1);
+        RETURN;
+    END
+
+    -- ========== THỰC HIỆN INSERT ==========
     BEGIN TRY
-        -- Trigger TR_SanPham_KiemTraRangBuoc sẽ tự động validate trước khi INSERT
         INSERT INTO SAN_PHAM
         (MaSanPham, MaSoShop, TenSanPham, ThongTinSanPham, LinkSanPham, GiaHienThi, Loai)
     VALUES
@@ -80,14 +123,13 @@ BEGIN
         PRINT N'✅ Thêm sản phẩm thành công!';
     END TRY
     BEGIN CATCH
-        -- Trigger sẽ RAISERROR nếu validation thất bại
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
         RAISERROR(@ErrorMessage, 16, 1);
     END CATCH
 END;
 GO
 
--- 3. Stored Procedure: Cập nhật sản phẩm (Trigger xử lý validation)
+-- 3. Stored Procedure: Cập nhật sản phẩm (Có validation trong thủ tục)
 CREATE OR ALTER PROCEDURE sp_CapNhatSanPham
     @MaSanPham VARCHAR(100),
     @TenSanPham NVARCHAR(255) = NULL,
@@ -96,8 +138,42 @@ CREATE OR ALTER PROCEDURE sp_CapNhatSanPham
     @Loai NVARCHAR(100) = NULL
 AS
 BEGIN
+    SET NOCOUNT ON;
+
+    -- ========== VALIDATION (YÊU CẦU 2.1) ==========
+
+    -- Validate 1: Kiểm tra sản phẩm có tồn tại không
+    IF NOT EXISTS (SELECT 1
+    FROM SAN_PHAM
+    WHERE MaSanPham = @MaSanPham)
+    BEGIN
+        RAISERROR(N'Lỗi: Sản phẩm không tồn tại!', 16, 1);
+        RETURN;
+    END
+
+    -- Validate 2: Nếu có cập nhật giá, kiểm tra giá > 0
+    IF @GiaHienThi IS NOT NULL AND @GiaHienThi <= 0
+    BEGIN
+        RAISERROR(N'Lỗi: Giá sản phẩm phải lớn hơn 0!', 16, 1);
+        RETURN;
+    END
+
+    -- Validate 3: Nếu có cập nhật tên, kiểm tra tên không rỗng
+    IF @TenSanPham IS NOT NULL AND LEN(LTRIM(RTRIM(@TenSanPham))) = 0
+    BEGIN
+        RAISERROR(N'Lỗi: Tên sản phẩm không được để trống!', 16, 1);
+        RETURN;
+    END
+
+    -- Validate 4: Nếu có cập nhật loại, kiểm tra loại không rỗng
+    IF @Loai IS NOT NULL AND LEN(LTRIM(RTRIM(@Loai))) = 0
+    BEGIN
+        RAISERROR(N'Lỗi: Loại sản phẩm không được để trống!', 16, 1);
+        RETURN;
+    END
+
+    -- ========== THỰC HIỆN UPDATE ==========
     BEGIN TRY
-        -- Trigger TR_SanPham_KiemTraRangBuoc sẽ tự động validate trước khi UPDATE
         UPDATE SAN_PHAM
         SET 
             TenSanPham = ISNULL(@TenSanPham, TenSanPham),
@@ -106,31 +182,123 @@ BEGIN
             Loai = ISNULL(@Loai, Loai)
         WHERE MaSanPham = @MaSanPham;
 
-        PRINT N'✅ Cập nhật sản phẩm thành công!';
+        PRINT N' Cập nhật sản phẩm thành công!';
     END TRY
     BEGIN CATCH
-        -- Trigger sẽ RAISERROR nếu validation thất bại
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
         RAISERROR(@ErrorMessage, 16, 1);
     END CATCH
 END;
 GO
 
--- 4. Stored Procedure: Xóa sản phẩm (Trigger xử lý validation & cascading delete)
+-- 4. Stored Procedure: Xóa sản phẩm (Có validation trong thủ tục)
 CREATE OR ALTER PROCEDURE sp_XoaSanPham
     @MaSanPham VARCHAR(100)
 AS
 BEGIN
-    BEGIN TRY
-        -- Trigger TR_SanPham_KiemTraTruocKhiXoa sẽ tự động:
-        -- 1. Kiểm tra có trong đơn hàng không
-        -- 2. Xóa cascading (LINK_ANH, DANH_GIA, BIEN_THE, v.v.)
-        DELETE FROM SAN_PHAM WHERE MaSanPham = @MaSanPham;
+    SET NOCOUNT ON;
 
+    -- ========== VALIDATION (YÊU CẦU 2.1) ==========
+
+    -- Validate 1: Kiểm tra sản phẩm có tồn tại không
+    IF NOT EXISTS (SELECT 1
+    FROM SAN_PHAM
+    WHERE MaSanPham = @MaSanPham)
+    BEGIN
+        RAISERROR(N'Lỗi: Sản phẩm không tồn tại!', 16, 1);
+        RETURN;
+    END
+
+    -- Validate 2: KHÔNG được xóa sản phẩm đã có trong đơn hàng
+    IF EXISTS (
+        SELECT 1
+    FROM DON_HANG dh
+        INNER JOIN BIEN_THE_SAN_PHAM bt ON dh.ID_BienThe = bt.ID AND dh.MaSanPham_BienThe = bt.MaSanPham
+    WHERE bt.MaSanPham = @MaSanPham
+    )
+    BEGIN
+        RAISERROR(N'Lỗi: Không thể xóa sản phẩm vì đã có trong đơn hàng!', 16, 1);
+        RETURN;
+    END
+
+    -- ========== THỰC HIỆN XÓA CASCADING ==========
+    BEGIN TRY
+        BEGIN TRANSACTION;
+        
+        -- Đếm số lượng dữ liệu TRƯỚC KHI xóa (để ghi vào AUDIT)
+        DECLARE @SoBienTheXoa INT, @SoDanhGiaXoa INT, @SoAnhVideoXoa INT, @SoGioHangXoa INT;
+        
+        SELECT @SoBienTheXoa = COUNT(*)
+    FROM BIEN_THE_SAN_PHAM
+    WHERE MaSanPham = @MaSanPham;
+        SELECT @SoDanhGiaXoa = COUNT(*)
+    FROM DANH_GIA
+    WHERE MaSanPham = @MaSanPham;
+        SELECT @SoAnhVideoXoa = COUNT(*)
+    FROM LINK_ANH_VIDEO_SAN_PHAM
+    WHERE MaSanPham = @MaSanPham;
+        SELECT @SoGioHangXoa = COUNT(*)
+    FROM GIO_HANG_CHUA gh
+        INNER JOIN BIEN_THE_SAN_PHAM bt ON gh.ID_BienThe = bt.ID AND gh.MaSanPham = bt.MaSanPham
+    WHERE bt.MaSanPham = @MaSanPham;
+        
+        -- Lưu số lượng vào bảng tạm để trigger có thể đọc
+        CREATE TABLE #TempAuditCount
+    (
+        SoBienTheXoa INT,
+        SoDanhGiaXoa INT,
+        SoAnhVideoXoa INT,
+        SoGioHangXoa INT
+    );
+        INSERT INTO #TempAuditCount
+    VALUES
+        (@SoBienTheXoa, @SoDanhGiaXoa, @SoAnhVideoXoa, @SoGioHangXoa);
+        
+        -- Xóa các bảng liên quan theo thứ tự
+        -- 1. Xóa link ảnh/video đánh giá
+        DELETE la 
+        FROM LINK_ANH_VIDEO_DANH_GIA la
+        INNER JOIN DANH_GIA dg ON la.MaDanhGia = dg.MaDanhGia
+            AND la.MaSanPham = dg.MaSanPham
+            AND la.TenDangNhapNguoiMua = dg.TenDangNhapNguoiMua
+        WHERE dg.MaSanPham = @MaSanPham;
+        
+        -- 2. Xóa đánh giá
+        DELETE FROM DANH_GIA WHERE MaSanPham = @MaSanPham;
+        
+        -- 3. Xóa link ảnh/video sản phẩm
+        DELETE FROM LINK_ANH_VIDEO_SAN_PHAM WHERE MaSanPham = @MaSanPham;
+        
+        -- 4. Xóa duyệt sản phẩm
+        DELETE FROM DUYET_SAN_PHAM WHERE MaSanPham = @MaSanPham;
+        
+        -- 5. Xóa giỏ hàng chứa biến thể
+        DELETE gh
+        FROM GIO_HANG_CHUA gh
+        INNER JOIN BIEN_THE_SAN_PHAM bt ON gh.ID_BienThe = bt.ID AND gh.MaSanPham = bt.MaSanPham
+        WHERE bt.MaSanPham = @MaSanPham;
+        
+        -- 6. Xóa mặt hàng áp dụng voucher
+        DELETE FROM MAT_HANG_AP_DUNG WHERE MatHangApDung = @MaSanPham;
+        
+        -- 7. Xóa thông tin biến thể
+        DELETE FROM THONG_TIN_BIEN_THE WHERE MaSanPham = @MaSanPham;
+        
+        -- 8. Xóa biến thể sản phẩm
+        DELETE FROM BIEN_THE_SAN_PHAM WHERE MaSanPham = @MaSanPham;
+        
+        -- 9. Xóa sản phẩm chính (Trigger sẽ tự động ghi log)
+        DELETE FROM SAN_PHAM WHERE MaSanPham = @MaSanPham;
+        
+        -- Xóa bảng tạm
+        DROP TABLE #TempAuditCount;
+        
+        COMMIT TRANSACTION;
         PRINT N'✅ Xóa sản phẩm thành công!';
     END TRY
     BEGIN CATCH
-        -- Trigger sẽ RAISERROR nếu validation thất bại
+        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+        IF OBJECT_ID('tempdb..#TempAuditCount') IS NOT NULL DROP TABLE #TempAuditCount;
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
         RAISERROR(@ErrorMessage, 16, 1);
     END CATCH
@@ -257,7 +425,72 @@ BEGIN
 END;
 GO
 
+-- --------------------------------------------------------------------------------------
+-- THỦ TỤC 8: STORED PROCEDURE: ĐẶT HÀNG (TRANSACTION)
+-- --------------------------------------------------------------------------------------
+CREATE OR ALTER PROCEDURE dbo.sp_DatHang
+    (
+    @MaDonHang CHAR(8),
+    @MaVoucherShop CHAR(8) = NULL,
+    @MaVoucherAdmin CHAR(8) = NULL,
+    @MaVoucherTransport CHAR(8) = NULL
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        IF NOT EXISTS (SELECT 1
+    FROM DON_HANG
+    WHERE MaDonHang = @MaDonHang)
+        BEGIN
+        RAISERROR(N'Đơn hàng không tồn tại!', 16, 1);
+        ROLLBACK TRANSACTION;
+        RETURN;
+    END
+
+        DELETE FROM AP_DUNG_MA_GIAM_GIA WHERE MaDonHang = @MaDonHang;
+
+        IF @MaVoucherShop IS NOT NULL AND LEN(@MaVoucherShop) > 0 AND EXISTS (SELECT 1
+        FROM MA_GIAM_GIA
+        WHERE MaVoucher = @MaVoucherShop)
+            INSERT INTO AP_DUNG_MA_GIAM_GIA
+        (MaVoucher, MaDonHang)
+    VALUES
+        (@MaVoucherShop, @MaDonHang);
+
+        IF @MaVoucherAdmin IS NOT NULL AND LEN(@MaVoucherAdmin) > 0 AND EXISTS (SELECT 1
+        FROM MA_GIAM_GIA
+        WHERE MaVoucher = @MaVoucherAdmin)
+            INSERT INTO AP_DUNG_MA_GIAM_GIA
+        (MaVoucher, MaDonHang)
+    VALUES
+        (@MaVoucherAdmin, @MaDonHang);
+
+        IF @MaVoucherTransport IS NOT NULL AND LEN(@MaVoucherTransport) > 0 AND EXISTS (SELECT 1
+        FROM MA_GIAM_GIA
+        WHERE MaVoucher = @MaVoucherTransport)
+            INSERT INTO AP_DUNG_MA_GIAM_GIA
+        (MaVoucher, MaDonHang)
+    VALUES
+        (@MaVoucherTransport, @MaDonHang);
+
+        COMMIT TRANSACTION;
+        SELECT 1 AS Status, N'Đặt hàng thành công!' AS Message;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        SELECT 0 AS Status, @ErrorMessage AS Message;
+    END CATCH
+END;
+GO
+
 PRINT 'Đã tạo xong các Stored Procedures!';
+
+
+
 
 -- ================= TEST STORED PROCEDURES =================
 -- Test 1: Tra cứu sản phẩm Laptop
